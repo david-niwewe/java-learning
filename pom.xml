@@ -5,11 +5,55 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.calculator</groupId>
     <artifactId>calculator-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>CLI Scientific Calculator</name>
-    <description>Java CLI Calculator demonstrating OOP and SOLID principles</description>
+    <version>2.0.0</version>
+    <name>CLI Advanced Calculator</name>
+    <description>
+        Java CLI Calculator demonstrating OOP, SOLID principles, Maven packaging, and Javadoc generation.
+    </description>
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.javadoc.skip>false</maven.javadoc.skip>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <source>21</source>
+                    <encoding>UTF-8</encoding>
+                    <failOnError>false</failOnError>
+                    <author>true</author>
+                    <version>true</version>
+                    <use>true</use>
+                    <linksource>true</linksource>
+                    <doctitle>CLI Calculator API Documentation</doctitle>
+                    <windowtitle>CLI Calculator - Java 21</windowtitle>
+                    <additionalJOptions>
+                        <additionalJOption>--enable-preview</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
