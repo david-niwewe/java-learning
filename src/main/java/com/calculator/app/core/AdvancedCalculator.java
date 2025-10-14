@@ -1,10 +1,16 @@
-package com.calculator.app.calculations;
+package com.calculator.app.core;
+
+import com.calculator.app.exceptions.InvalidInputException;
+import com.calculator.app.exceptions.InvalidOperationException;
+import com.calculator.app.exceptions.MathOverflowException;
 
 /**
  * Advanced calculator extends ScientificCalculator.
  * Adds more complex mathematical operations.
  */
 public class AdvancedCalculator extends ScientificCalculator {
+    private static final int FACTORIAL_LIMIT = 20;
+    private static final int FIBONACCI_LIMIT = 50;
 
     /**
      * Handles advanced operations like factorial, fibonacci, GCD, LCM.
@@ -14,15 +20,17 @@ public class AdvancedCalculator extends ScientificCalculator {
      * @param op operation
      * @return result
      */
-    public double calculateAdvanced(double a, double b, EOperation op) {
+    public double calculateAdvanced(double a, double b, EOperation op) throws InvalidOperationException {
         switch (op) {
             case FACTORIAL:
                 if (a < 0 || a != (int) a)
-                    throw new IllegalArgumentException("Factorial requires a non-negative integer.");
+                    throw new InvalidInputException("Factorial requires a non-negative integer.");
+                if (a > FACTORIAL_LIMIT)
+                    throw new MathOverflowException("Factorial result too large or computation too heavy.");
                 return factorial((int) a);
             case FIBONACCI:
                 if (a < 0 || a != (int) a)
-                    throw new IllegalArgumentException("Fibonacci requires a non-negative integer.");
+                    throw new InvalidInputException("Fibonacci requires a non-negative integer.");
                 return fibonacci((int) a);
             case GCD:
                 return gcd((int) a, (int) b);

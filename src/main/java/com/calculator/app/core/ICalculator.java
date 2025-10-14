@@ -1,4 +1,6 @@
-package com.calculator.app.calculations;
+package com.calculator.app.core;
+
+import com.calculator.app.exceptions.InvalidOperationException;
 
 public interface ICalculator {
     /**
@@ -12,5 +14,5 @@ public interface ICalculator {
      *
      * @author David NIWEWE
      */
-    double calculate(double a, double b, EOperation op);
+    double calculate(double a, double b, EOperation op) throws InvalidOperationException;
 }

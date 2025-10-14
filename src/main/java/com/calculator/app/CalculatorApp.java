@@ -1,8 +1,9 @@
 package com.calculator.app;
 
-import com.calculator.app.calculations.AdvancedCalculator;
-import com.calculator.app.calculations.EOperation;
-import com.calculator.app.calculations.ICalculator;
+import com.calculator.app.core.AdvancedCalculator;
+import com.calculator.app.core.EOperation;
+import com.calculator.app.core.ICalculator;
+import com.calculator.app.exceptions.InvalidOperationException;
 
 import java.util.Scanner;
 
@@ -34,7 +35,7 @@ public class CalculatorApp {
                 double result = calculator.calculate(a, b, operation);
                 System.out.println("Result: " + result);
 
-            } catch (IllegalArgumentException e) {
+            } catch (InvalidOperationException e) {
                 System.out.println("Error: " + e.getMessage());
             }
 

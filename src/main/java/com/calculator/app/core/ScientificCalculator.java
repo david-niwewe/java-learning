@@ -1,4 +1,4 @@
-package com.calculator.app.calculations;
+package com.calculator.app.core;
 
 /**
  * Scientific calculator extends BasicCalculator.

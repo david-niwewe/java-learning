@@ -34,7 +34,7 @@ This project helps you learn:
 - Class **inheritance** and **method overriding**
 - **Polymorphism**: using a single variable for multiple implementations
 - **Enums** to represent operations safely
-- Exception handling and input validation
+- **Exception handling** and input validation
 - CLI application structure in Java
 - Separation of concerns and clean coding practices
 
