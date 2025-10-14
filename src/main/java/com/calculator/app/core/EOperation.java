@@ -31,6 +31,10 @@ public enum EOperation {
         this.requiresSecondOperand = requiresSecondOperand;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
     public boolean requiresSecondOperand() { return requiresSecondOperand; }
 
     public static EOperation fromSymbol(String symbol) {

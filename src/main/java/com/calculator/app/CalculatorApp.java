@@ -4,6 +4,7 @@ import com.calculator.app.core.AdvancedCalculator;
 import com.calculator.app.core.EOperation;
 import com.calculator.app.core.ICalculator;
 import com.calculator.app.exceptions.InvalidOperationException;
+import com.calculator.app.history.HistoryManager;
 
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ public class CalculatorApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ICalculator calculator = new AdvancedCalculator();
+        HistoryManager history = new HistoryManager();
 
         System.out.println("=== CLI Scientific Calculator ===");
 
@@ -34,6 +36,7 @@ public class CalculatorApp {
 
                 double result = calculator.calculate(a, b, operation);
                 System.out.println("Result: " + result);
+                history.addRecord(a, b, operation, result);
 
             } catch (InvalidOperationException e) {
                 System.out.println("Error: " + e.getMessage());
@@ -44,6 +47,17 @@ public class CalculatorApp {
             if (cont != 'y') {
                 running = false;
             }
+        }
+
+        System.out.print("\nDo you want to view calculation history? (y/n): ");
+        char view = scanner.next().toLowerCase().charAt(0);
+        if (view == 'y') {
+            history.displayHistory();
+        }
+
+        System.out.print("Clear history? (y/n): ");
+        if (scanner.next().toLowerCase().charAt(0) == 'y') {
+            history.clearHistory();
         }
 
         System.out.println("Calculator closed.");
