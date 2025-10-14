@@ -31,6 +31,8 @@ public class AdvancedCalculator extends ScientificCalculator {
             case FIBONACCI:
                 if (a < 0 || a != (int) a)
                     throw new InvalidInputException("Fibonacci requires a non-negative integer.");
+                if (a > FIBONACCI_LIMIT)
+                    throw new MathOverflowException("Fibonacci result too large or computation too heavy.");
                 return fibonacci((int) a);
             case GCD:
                 return gcd((int) a, (int) b);
