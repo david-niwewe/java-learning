@@ -1,6 +1,6 @@
 # CLI Scientific Calculator in Java
 
-A **Command Line Interface (CLI) Scientific Calculator** implemented in Java.  
+A **Command Line Interface (CLI) Scientific Calculator** implemented in Java using Maven.  
 This project demonstrates **core Java programming**, **object-oriented programming (OOP) principles**, **input validation**, and **robust exception handling**.
 
 ---
@@ -72,11 +72,11 @@ Ensure you have Java installed (JDK 8+ recommended).
 Open a terminal in the project directory and run:
 
 ```bash
-javac CalculatorApp.java
+mvn compile
 
 ```
 ### **2. Running**
 After compilation use the command below to run the application.
 ```bash
-java CalculatorApp
+mvn exec:java -Dexec.mainClass="com.calculator.app.CalculatorApp"
 ```
