@@ -10,10 +10,14 @@ public class BasicCalculator implements ICalculator{
             case DIVIDE:
                 if (b == 0) throw new IllegalArgumentException("Division by zero is not allowed.");
                 return a / b;
+            case FACTORIAL:
+            case FIBONACCI:
+            case GCD:
+            case LCM:
+                return ((AdvancedCalculator) this).calculateAdvanced(a, b, op);
             default:
-                // Delegate unknown operations to subclass if applicable
                 if (this instanceof ScientificCalculator) {
-                    return ((ScientificCalculator) this).calculateScientific(a, b, op);
+                   return ((ScientificCalculator) this).calculateScientific(a, b, op);
                 }
                 throw new IllegalArgumentException("Unknown operation: " + op);
         }

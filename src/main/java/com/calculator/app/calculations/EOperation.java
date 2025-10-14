@@ -15,7 +15,13 @@ public enum EOperation {
     SQRT("sqrt", false),
     SIN("sin", false),
     COS("cos", false),
-    TAN("tan", false);
+    TAN("tan", false),
+
+    // Advanced operations
+    FACTORIAL("factorial", false),
+    FIBONACCI("fibonacci", false),
+    GCD("gcd", true),
+    LCM("lcm", true);
 
     private final String symbol;
     private final boolean requiresSecondOperand;
@@ -24,8 +30,6 @@ public enum EOperation {
         this.symbol = symbol;
         this.requiresSecondOperand = requiresSecondOperand;
     }
-
-    public String getSymbol() { return symbol; }
 
     public boolean requiresSecondOperand() { return requiresSecondOperand; }
 

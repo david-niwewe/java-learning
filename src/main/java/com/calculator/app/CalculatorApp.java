@@ -1,8 +1,8 @@
 package com.calculator.app;
 
+import com.calculator.app.calculations.AdvancedCalculator;
 import com.calculator.app.calculations.EOperation;
 import com.calculator.app.calculations.ICalculator;
-import com.calculator.app.calculations.ScientificCalculator;
 
 import java.util.Scanner;
 
@@ -14,7 +14,7 @@ public class CalculatorApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ICalculator calculator = new ScientificCalculator();
+        ICalculator calculator = new AdvancedCalculator();
 
         System.out.println("=== CLI Scientific Calculator ===");
 
@@ -63,7 +63,7 @@ public class CalculatorApp {
 
     private static String readOperation(Scanner scanner) {
         while (true) {
-            System.out.print("Enter operation (+, -, *, /, ^, sqrt, sin, cos, tan): ");
+            System.out.print("Enter operation (+, -, *, /, ^, sqrt, sin, cos, tan, factorial, fibonacci, gcd, lcm): ");
             String input = scanner.next();
             if (EOperation.fromSymbol(input) != null) {
                 return input;
