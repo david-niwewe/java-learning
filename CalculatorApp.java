@@ -1,45 +1,80 @@
 import java.util.Scanner;
 
+import java.util.Scanner;
+
 /**
  * Entry point for the CLI Calculator application.
- * Demonstrates OOP, enums, and exception handling in Java.
+ * ScientificCalculator extends BasicCalculator, so all operations are available.
  */
 public class CalculatorApp {
 
-    /**
-     * Main method to run the CLI calculator.
-     * Handles user input and displays results.
-     *
-     * @param args command-line arguments (not used)
-     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Calculator calculator = new BasicCalculator();
+        Calculator calculator = new ScientificCalculator(); // Unified calculator
 
-        System.out.println("=== Exception-based CLI Calculator ===");
+        System.out.println("=== CLI Scientific Calculator ===");
 
-        try {
-            System.out.print("Enter first number: ");
-            double a = scanner.nextDouble();
+        boolean running = true;
+        while (running) {
+            try {
+                // Validate first number
+                double a = readNumber(scanner, "Enter first number: ");
 
-            System.out.print("Enter operation (+, -, *, /): ");
-            String opSymbol = scanner.next();
+                // Validate operation symbol
+                String opSymbol = readOperation(scanner, "Enter operation (e.g., +, -, *, /, ^, sqrt, sin, cos, tan): ");
+                Operation operation = Operation.fromSymbol(opSymbol);
 
-            System.out.print("Enter second number: ");
-            double b = scanner.nextDouble();
+                double b = 0;
+                if (operation.requiresSecondOperand()) {
+                    b = readNumber(scanner, "Enter second number: ");
+                }
 
-            Operation operation = Operation.fromSymbol(opSymbol);
-            if (operation == null) {
-                throw new IllegalArgumentException("Invalid operator: " + opSymbol);
+                double result = calculator.calculate(a, b, operation);
+                System.out.println("Result: " + result);
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
             }
 
-            double result = calculator.calculate(a, b, operation);
-            System.out.println("Result: " + result);
+            // Ask user whether to continue
+            System.out.print("\nPerform another calculation? (y/n): ");
+            char cont = scanner.next().toLowerCase().charAt(0);
+            if (cont != 'y') {
+                running = false;
+            }
+        }
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        } finally {
-            scanner.close();
+        System.out.println("Calculator closed.");
+        scanner.close();
+    }
+
+    /**
+     * Reads and validates a double number from the user.
+     */
+    private static double readNumber(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (scanner.hasNextDouble()) {
+                return scanner.nextDouble();
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.next(); // discard invalid input
+            }
+        }
+    }
+
+    /**
+     * Reads and validates an operation symbol from the user.
+     */
+    private static String readOperation(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.next();
+            if (Operation.fromSymbol(input) != null) {
+                return input;
+            } else {
+                System.out.println("Invalid operation. Please enter a valid operator.");
+            }
         }
     }
 }
@@ -48,102 +83,101 @@ public class CalculatorApp {
  * Calculator interface defining arithmetic operations.
  */
 interface Calculator {
-
     /**
-     * Calculates a result based on the given operands and operation.
+     * Calculate result based on operation.
      *
-     * @param a  first operand
-     * @param b  second operand
-     * @param op arithmetic operation to perform
-     * @return result of the calculation
-     * @throws IllegalArgumentException if operation is invalid (e.g., division by zero)
+     * @param a first operand
+     * @param b second operand (optional for unary)
+     * @param op operation to perform
+     * @return result
+     * @throws IllegalArgumentException for invalid operations
      */
     double calculate(double a, double b, Operation op);
 }
 
 /**
- * Basic implementation of the Calculator interface.
- * Supports addition, subtraction, multiplication, and division.
+ * Basic calculator implementation.
  */
 class BasicCalculator implements Calculator {
 
-    /**
-     * Performs calculation based on the given operation.
-     *
-     * @param a  first operand
-     * @param b  second operand
-     * @param op arithmetic operation
-     * @return result of the calculation
-     * @throws IllegalArgumentException if division by zero occurs or operation is unknown
-     */
     @Override
     public double calculate(double a, double b, Operation op) {
         switch (op) {
-            case ADD:
-                return a + b;
-            case SUBTRACT:
-                return a - b;
-            case MULTIPLY:
-                return a * b;
+            case ADD: return a + b;
+            case SUBTRACT: return a - b;
+            case MULTIPLY: return a * b;
             case DIVIDE:
-                if (b == 0) {
-                    throw new IllegalArgumentException("Division by zero is not allowed.");
-                }
+                if (b == 0) throw new IllegalArgumentException("Division by zero is not allowed.");
                 return a / b;
             default:
+                // Delegate unknown operations to subclass if applicable
+                if (this instanceof ScientificCalculator) {
+                    return ((ScientificCalculator) this).calculateScientific(a, b, op);
+                }
                 throw new IllegalArgumentException("Unknown operation: " + op);
         }
     }
 }
 
 /**
- * Enum representing supported arithmetic operations.
+ * Scientific calculator extends BasicCalculator.
+ * Adds scientific operations on top of basic ones.
+ */
+class ScientificCalculator extends BasicCalculator {
+
+    /**
+     * Handles scientific operations.
+     *
+     * @param a  first operand
+     * @param b  second operand (optional)
+     * @param op operation
+     * @return calculation result
+     */
+    public double calculateScientific(double a, double b, Operation op) {
+        switch (op) {
+            case POWER: return Math.pow(a, b);
+            case SQRT: return Math.sqrt(a);
+            case SIN: return Math.sin(Math.toRadians(a));
+            case COS: return Math.cos(Math.toRadians(a));
+            case TAN: return Math.tan(Math.toRadians(a));
+            default:
+                throw new IllegalArgumentException("Unknown scientific operation: " + op);
+        }
+    }
+}
+
+/**
+ * Enum representing all supported operations.
  */
 enum Operation {
+    // Basic operations
+    ADD("+", true),
+    SUBTRACT("-", true),
+    MULTIPLY("*", true),
+    DIVIDE("/", true),
 
-    /** Addition operation. */
-    ADD("+"),
-
-    /** Subtraction operation. */
-    SUBTRACT("-"),
-
-    /** Multiplication operation. */
-    MULTIPLY("*"),
-
-    /** Division operation. */
-    DIVIDE("/");
+    // Scientific operations
+    POWER("^", true),
+    SQRT("sqrt", false),
+    SIN("sin", false),
+    COS("cos", false),
+    TAN("tan", false);
 
     private final String symbol;
+    private final boolean requiresSecondOperand;
 
-    /**
-     * Constructor to assign symbol to the enum.
-     *
-     * @param symbol operator symbol as a string
-     */
-    Operation(String symbol) {
+    Operation(String symbol, boolean requiresSecondOperand) {
         this.symbol = symbol;
+        this.requiresSecondOperand = requiresSecondOperand;
     }
 
-    /**
-     * Gets the symbol representing the operation.
-     *
-     * @return operator symbol
-     */
-    public String getSymbol() {
-        return symbol;
-    }
+    public String getSymbol() { return symbol; }
 
-    /**
-     * Converts a string symbol to the corresponding Operation enum.
-     *
-     * @param symbol operator symbol as string
-     * @return matching Operation enum, or null if no match
-     */
+    public boolean requiresSecondOperand() { return requiresSecondOperand; }
+
     public static Operation fromSymbol(String symbol) {
-        for (Operation op : Operation.values()) {
-            if (op.getSymbol().equals(symbol)) {
-                return op;
-            }
+        for (Operation op : values()) {
+            if (op.symbol.equals(symbol)) return op;
         }
         return null;
     }
