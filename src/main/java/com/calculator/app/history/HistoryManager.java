@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class HistoryManager {
 
-    // Each entry is stored as a HistoryRecord object
     private final List<HistoryRecord> historyList = new ArrayList<>();
 
     /**
