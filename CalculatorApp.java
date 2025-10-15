@@ -21,7 +21,7 @@ public class CalculatorApp {
                 double a = readNumber(scanner, "Enter first number: ");
 
                 // Validate operation symbol
-                String opSymbol = readOperation(scanner, "Enter operation (e.g., +, -, *, /, ^, sqrt, sin, cos, tan): ");
+                String opSymbol = readOperation(scanner, "Enter operation (e.g., +, -, *, /, ^, % , sqrt, sin, cos, tan): ");
                 Operation operation = Operation.fromSymbol(opSymbol);
 
                 double b = 0;
@@ -106,6 +106,7 @@ class BasicCalculator implements Calculator {
             case ADD: return a + b;
             case SUBTRACT: return a - b;
             case MULTIPLY: return a * b;
+            case MODULUS: return a % b;
             case DIVIDE:
                 if (b == 0) throw new IllegalArgumentException("Division by zero is not allowed.");
                 return a / b;
@@ -155,6 +156,7 @@ enum Operation {
     SUBTRACT("-", true),
     MULTIPLY("*", true),
     DIVIDE("/", true),
+    MODULUS("%",true),
 
     // Scientific operations
     POWER("^", true),
